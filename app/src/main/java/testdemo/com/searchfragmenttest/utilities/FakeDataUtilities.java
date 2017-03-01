@@ -1,6 +1,7 @@
 package testdemo.com.searchfragmenttest.utilities;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,6 +11,8 @@ import testdemo.com.searchfragmenttest.model.EmployeeGeneratedData;
 import testdemo.com.searchfragmenttest.model.LocationData;
 
 public class FakeDataUtilities extends  Utilities{
+
+    static private final String TAG = "FakeDataUtilities";
 
     static public ArrayList<EmployeeGeneratedData> getFakeEmployeeData() {
 
@@ -25,10 +28,15 @@ public class FakeDataUtilities extends  Utilities{
         ArrayList<EmployeeGeneratedData> searchDataArrayList = new ArrayList<>();
 
         for (EmployeeGeneratedData employeeData: employeeDataArrayList) {
-          if (employeeData.getName().contains(name)) {
+
+          String lowerCaseEmployeeName = employeeData.getName().toLowerCase();
+          String lowerCaseName = name.toLowerCase();
+          if (lowerCaseEmployeeName.contains(lowerCaseName)) {
               searchDataArrayList.add(employeeData);
           }
         }
+
+        Log.d(TAG, "searchDataArrayList size: " + searchDataArrayList.size());
 
         return searchDataArrayList;
 
