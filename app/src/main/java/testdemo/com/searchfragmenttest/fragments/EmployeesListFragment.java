@@ -18,14 +18,9 @@ import testdemo.com.searchfragmenttest.customview.CustomScrollerViewProvider;
 import testdemo.com.searchfragmenttest.decoration.DividerDecoration;
 import testdemo.com.searchfragmenttest.model.EmployeeListRestrictionsParcelable;
 
-
 public class EmployeesListFragment extends RecyclerFragment {
 
     private final String TAG = "EmployeesListFragment";
-
-    private static String locationOrDivisonString = "NoLocationOrDivisonString";
-    private static String locationString = "NoLocation";
-    private static String divisionString = "NoDivision";
 
     protected EmployeesRecyclerAdapter mAdapter;
 
@@ -37,11 +32,6 @@ public class EmployeesListFragment extends RecyclerFragment {
                              Bundle savedInstanceState) {
 
         Log.d(TAG, "onCreateView: " + container);
-
-        EmployeeListRestrictionsParcelable employeeListRestrictionsParcelable =
-            this.getArguments().getParcelable(EmployeeListRestrictionsParcelable.BUNDLE_KEY);
-        String location = employeeListRestrictionsParcelable.getLocation();
-        String division = employeeListRestrictionsParcelable.getDivision();
 
         View rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
 
@@ -60,30 +50,10 @@ public class EmployeesListFragment extends RecyclerFragment {
 
         mAdapter = getAdapter(); // EmployeesRecyclerAdapter
 
-
         mAdapter.addEmployeesToRowItems();
 
         // set title for action bar
         String title = getResources().getString(R.string.title_section1);
-//
-//        // set title
-//        if (! location.equalsIgnoreCase("")) {
-//          if ( ! division.equalsIgnoreCase("")) { // location and division (because location is Santa Fe)
-//              mAdapter.populateLocationAndDivisionEmployeeListFromSQLite(location, division);
-//              title += " - " + location + " - " + division;
-//          }
-//          else { // just location
-//              mAdapter.populateLocationEmployeeListFromSQLite(location);
-//              title += " - " + location;
-//          }
-//        }
-//        else if (! division.equalsIgnoreCase("")) { // division only, no location
-//            mAdapter.populateDivisionEmployeeListFromSQLite(division);
-//            title += " - " + division;
-//        }
-//        else { // both location and division are blank, so display all
-//            mAdapter.addEmployeesToRowItems();
-//        }
 
         mAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -93,8 +63,6 @@ public class EmployeesListFragment extends RecyclerFragment {
         fastScroller.setRecyclerView(mRecyclerView);
 
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        //String device_size = getResources().getString(R.string.device_size); // TODO device_size remove for production
-        //actionBar.setTitle(title + " : " + device_size);
         actionBar.setTitle(title);
 
         return rootView;
