@@ -23,4 +23,7 @@
         <item>About</item>
     </string-array>
 
+    <string name="search_hint">Jose</string>
+    <string name="displaySearchEmployeesKey">displaySearchEmployeesKey</string>
+
 </resources>

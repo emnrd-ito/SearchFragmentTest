@@ -1,23 +1,36 @@
 package testdemo.com.searchfragmenttest;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import testdemo.com.searchfragmenttest.adapters.DrawerItemCustomAdapter;
 import testdemo.com.searchfragmenttest.fragments.FragmentChange;
 import testdemo.com.searchfragmenttest.fragments.FragmentChangeEvent;
+import testdemo.com.searchfragmenttest.fragments.SearchListFragment;
 import testdemo.com.searchfragmenttest.model.DataModel;
 import testdemo.com.searchfragmenttest.utilities.PreferencesUtilities;
 
+import static testdemo.com.searchfragmenttest.R.string.displaySearchEmployeesKey;
 import static testdemo.com.searchfragmenttest.fragments.FragmentChange.FRAGMENT_ABOUT;
 import static testdemo.com.searchfragmenttest.fragments.FragmentChange.FRAGMENT_ALL_EMPLOYEES_LIST;
+import static testdemo.com.searchfragmenttest.fragments.FragmentChange.FRAGMENT_SEARCH_LIST;
 import static testdemo.com.searchfragmenttest.fragments.NavigationDrawerFragment.NAVIGATION_MENU_ABOUT;
 import static testdemo.com.searchfragmenttest.fragments.NavigationDrawerFragment.NAVIGATION_MENU_ALL_EMPLOYEES;
 import static testdemo.com.searchfragmenttest.fragments.NavigationDrawerFragment.NUMBER_OF_DRAWER_ITEMS;
@@ -32,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private Toolbar toolbar;
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
+    //private CharSequence mDrawerTitle;
+    //private CharSequence mTitle;
     private android.support.v7.app.ActionBarDrawerToggle mDrawerToggle;
 
     @Override
@@ -43,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         mActivity = this;
 
-        mTitle = mDrawerTitle = getTitle();
+        //mTitle = mDrawerTitle = getTitle();
         mNavigationDrawerItemTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -72,7 +85,22 @@ public class MainActivity extends AppCompatActivity {
         }
         selectNavigationMenuItem(display); // cause employee list to display when starting
 
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo( searchManager.getSearchableInfo(getComponentName()));
+        ComponentName componentName = new ComponentName(this, MainActivity.class);
+//        ComponentName componentName = new ComponentName(this, SearchListFragment.class);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
+
+        return true;
     }
 
     void setupToolbar(){
@@ -93,8 +121,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentChange fragmentChange = FragmentChange.getInstance();
         FragmentChangeEvent fragmentChangeEvent = new FragmentChangeEvent(null);
 
-        Fragment fragment = null;
-
+        //Fragment fragment = null;
         String tag = Integer.toString(FRAGMENT_ALL_EMPLOYEES_LIST);
 
         switch (position) {
@@ -139,5 +166,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
 }

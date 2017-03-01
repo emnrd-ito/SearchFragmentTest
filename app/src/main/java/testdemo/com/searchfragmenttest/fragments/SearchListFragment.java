@@ -17,7 +17,7 @@ import testdemo.com.searchfragmenttest.adapters.EmployeesRecyclerAdapter;
 import testdemo.com.searchfragmenttest.customview.CustomScrollerViewProvider;
 import testdemo.com.searchfragmenttest.decoration.DividerDecoration;
 import testdemo.com.searchfragmenttest.model.EmployeeListRestrictionsParcelable;
-
+import testdemo.com.searchfragmenttest.utilities.PreferencesUtilities;
 
 public class SearchListFragment extends RecyclerFragment {
 
@@ -34,12 +34,9 @@ public class SearchListFragment extends RecyclerFragment {
 
         Log.d(TAG, "onCreateView: " + container);
 
-        EmployeeListRestrictionsParcelable employeeListRestrictionsParcelable =
-            this.getArguments().getParcelable(EmployeeListRestrictionsParcelable.BUNDLE_KEY);
+        String searchString = PreferencesUtilities.getLastSearchStringPreference(getActivity());
 
-        String searchString = employeeListRestrictionsParcelable.getSearch();
-
-        View rootView = inflater.inflate(R.layout.activity_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.section_list);
 
@@ -56,17 +53,17 @@ public class SearchListFragment extends RecyclerFragment {
 
         mAdapter = getAdapter(); // EmployeesRecyclerAdapter
 
+        // if search string is empty then display all employees
+        if (searchString.isEmpty()) {
+            mAdapter.populateEmployeeList();
+        }
+        else {
+            mAdapter.searchEmployeeList(searchString); // searchString here
+        }
+
         // set title for action bar
         String title = getResources().getString(R.string.title_search_results);
         title += " \"" + searchString + "\"";
-
-        // if search string is empty then display all employees
-        if (searchString.isEmpty()) {
-            mAdapter.addEmployeesToRowItems();
-        }
-        else {
-            mAdapter.populateEmployeeList(); // searchString here
-        }
 
         mAdapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -76,7 +73,7 @@ public class SearchListFragment extends RecyclerFragment {
         fastScroller.setRecyclerView(mRecyclerView);
 
         ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-//        actionBar.setTitle(title);
+        actionBar.setTitle(title);
 
         return rootView;
     }
