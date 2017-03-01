@@ -15,13 +15,9 @@ public class FragmentChange implements FragmentChangeListener {
     private final String TAG = "FragmentChange";
 
     // All the possible fragments to display
-    // Note that 0 - 3 correspond to MainActivity.onNavigationDrawerItemSelected(int position)
-    // Convert these to Strings to use these as tags for .replace(), as well
     static final public int FRAGMENT_ALL_EMPLOYEES_LIST = 0;
     static final public int FRAGMENT_ABOUT = 1;
     static final public int FRAGMENT_SEARCH_LIST = 2;
-
-    //private Stack<FragmentChangeEvent> fragmentStack = new Stack<>();
 
     private static FragmentChange instance;
     private int mPosition = 0;
@@ -40,7 +36,8 @@ public class FragmentChange implements FragmentChangeListener {
                                  FragmentChangeEvent fragmentChangeEvent,
                                  final FragmentManager fragmentManager,
                                  String tag) {
-        // update the main content by replacing fragments
+
+        // update by replacing fragments
 
         Bundle bundle = new Bundle();
 
@@ -59,13 +56,11 @@ public class FragmentChange implements FragmentChangeListener {
 
                 EmployeesListFragment fragment = new EmployeesListFragment();
 
-
                 bundle.putParcelable(EmployeeListRestrictionsParcelable.BUNDLE_KEY, employeeListRestrictionsParcelable);
                 fragment.setArguments(bundle);
 
                 fragmentTransaction.replace(R.id.container, fragment, Integer.toString(FragmentChange.FRAGMENT_ALL_EMPLOYEES_LIST));
-                //fragmentStack.clear();  // start over with the stack at the All Employee list
-                //fragmentStack.push(fragmentChangeEvent);
+
                 break;
 
             case FRAGMENT_ABOUT: // About (from onNavigationDrawerItemSelected)
@@ -75,17 +70,9 @@ public class FragmentChange implements FragmentChangeListener {
                 fragmentTransaction.replace(R.id.container, aboutFragment, Integer.toString(FragmentChange.FRAGMENT_ABOUT));
                 break;
 
-            case FRAGMENT_SEARCH_LIST: // App start or from onNavigationDrawerItemSelected
-
-                employeeListRestrictionsParcelable = new EmployeeListRestrictionsParcelable();
-                employeeListRestrictionsParcelable.setLocation("");
-                employeeListRestrictionsParcelable.setDivision("");
-                employeeListRestrictionsParcelable.setSearch(fragmentChangeEvent.getSearchString());
+            case FRAGMENT_SEARCH_LIST:
 
                 SearchListFragment searchListFragment = new SearchListFragment();
-
-                bundle.putParcelable(EmployeeListRestrictionsParcelable.BUNDLE_KEY, employeeListRestrictionsParcelable);
-                searchListFragment.setArguments(bundle);
 
                 PreferencesUtilities.setLastSearchStringPreference(context, fragmentChangeEvent.getSearchString());
 
