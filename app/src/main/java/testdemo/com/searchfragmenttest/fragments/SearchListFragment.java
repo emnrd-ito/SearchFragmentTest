@@ -61,6 +61,8 @@ public class SearchListFragment extends RecyclerFragment {
             mAdapter.searchEmployeeList(searchString); // searchString here
         }
 
+        mAdapter.addEmployeesToRowItems();
+
         // set title for action bar
         String title = getResources().getString(R.string.title_search_results);
         title += " \"" + searchString + "\"";
