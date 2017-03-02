@@ -95,11 +95,9 @@ public class MainActivity extends AppCompatActivity {
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo( searchManager.getSearchableInfo(getComponentName()));
-        ComponentName componentName = new ComponentName(this, MainActivity.class);
-//        ComponentName componentName = new ComponentName(this, SearchListFragment.class);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
-
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//  ComponentName componentName = new ComponentName(this, SearchListFragment.class);
+//  searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
         return true;
     }
 
@@ -166,4 +164,45 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    // onNewIntent not called when activity is newly created
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+
+        handleIntent(intent);
+    }
+
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        Intent intent = getIntent();
+//        handleIntent(intent);
+//    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            //use the query to search your data somehow
+            String query = intent.getStringExtra(SearchManager.QUERY);
+
+            Toast.makeText(this, "handleIntent: query: " + query, Toast.LENGTH_SHORT).show();
+            PreferencesUtilities.setLastSearchStringPreference(this, query);
+
+            FragmentChange fragmentChange = FragmentChange.getInstance();
+
+            FragmentManager fragmentManager = ((FragmentActivity) this).getSupportFragmentManager();
+            FragmentChangeEvent fragmentChangeEvent = new FragmentChangeEvent(null);
+
+            String tag = this.getResources().getString(displaySearchEmployeesKey);
+            fragmentChangeEvent.setPosition(FRAGMENT_SEARCH_LIST); // display employees from the search
+            fragmentChangeEvent.setSearchString(PreferencesUtilities.getLastSearchStringPreference(this));
+
+            fragmentChange.onFragmentChange(this, fragmentChangeEvent, fragmentManager, tag);
+
+        }
+    }
+
 }
