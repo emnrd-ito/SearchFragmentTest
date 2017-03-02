@@ -165,7 +165,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    // onNewIntent not called when activity is newly created
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -173,14 +172,6 @@ public class MainActivity extends AppCompatActivity {
 
         handleIntent(intent);
     }
-
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        Intent intent = getIntent();
-//        handleIntent(intent);
-//    }
 
     private void handleIntent(Intent intent) {
 
