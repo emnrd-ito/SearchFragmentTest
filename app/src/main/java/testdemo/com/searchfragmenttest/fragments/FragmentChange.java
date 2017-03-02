@@ -73,6 +73,7 @@ public class FragmentChange implements FragmentChangeListener {
             case FRAGMENT_SEARCH_LIST:
 
                 SearchListFragment searchListFragment = new SearchListFragment();
+                //fragment = new EmployeesListFragment();
 
                 PreferencesUtilities.setLastSearchStringPreference(context, fragmentChangeEvent.getSearchString());
 
@@ -84,7 +85,7 @@ public class FragmentChange implements FragmentChangeListener {
                 break; // do nothing
         }
 
-        fragmentTransaction.commit(); // IllegalStateException: Activity has been destroyed
+        fragmentTransaction.commit();
 
         // set current page
         PreferencesUtilities.setCurrentPageDisplayedPreference(context, mPosition);
